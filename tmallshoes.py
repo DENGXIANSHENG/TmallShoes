@@ -20,6 +20,7 @@ wait = WebDriverWait(browser, 10)
 
 
 def search():
+    print("searching")
     try:
         browser.get("https://www.tmall.com")
         input = wait.until(
@@ -35,7 +36,7 @@ def search():
             EC.presence_of_element_located((By.CSS_SELECTOR, "#J_FPrice > div.fP-box > b:nth-child(1) > input"))
         )
         inprice.send_keys("2000")
-		
+
         submitprice = wait.until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "#J_FPrice > div.fP-expand > #J_FPEnter"))
         )
@@ -51,15 +52,42 @@ def search():
                 (By.CSS_SELECTOR, "#content > div > div.ui-page > div > b.ui-page-skip > form"))
         )
         total = int(re.compile('(\d+)').search(total.text).group(1))
-        print(total)
-
+        return total
     except TimeoutException:
         search()
 
 
-def main():
-    search()
+def next_page(page_number):
+    print("next page")
+    try:
+        input = wait.until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "#content > div > div.ui-page > div > b.ui-page-skip > form > input.ui-page-skipTo"))
+        )
+        input.clear()
+        input.send_keys(page_number)
+        submit = wait.until(
+            EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "#content > div > div.ui-page > div > b.ui-page-skip > form > button"))
+        )
+        submit.click()
 
+        wait.until(
+            EC.text_to_be_present_in_element(
+                (By.CSS_SELECTOR, "#content > div > div.ui-page > div > b.ui-page-num > b.ui-page-cur"),
+                str(page_number))
+        )
+    except TimeoutException:
+        next_page(page_number)
+
+
+def main():
+    try:
+        page_number = search()
+        for i in range(2,page_number+1):
+            next_page(i)
+    except Exception:
+        print("Error")
 
 if __name__ == "__main__":
     main()
