@@ -4,12 +4,14 @@ from scrapy import signals
 from scrapy.xlib.pydispatch import dispatcher
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
+import logging
+from TmallShoes.items import TmallshoesItem
 
 
 class TmallshoesSpider(scrapy.Spider):
     name = 'tmallshoes'
     allowed_domains = ['www.tmall.com']
-    start_urls = ['https://www.tmall.com/']
+    start_urls = ['https://www.tmall.com']
 
     def __init__(self):
         '''
@@ -29,6 +31,15 @@ class TmallshoesSpider(scrapy.Spider):
         self.browser.quit()
 
     def parse(self, response):
-        products = response.xpath('//*[@id="J_ItemList"]/div[@class="product"]')
-        for product in products:
-            print(str(product))
+        logger = logging.getLogger()
+        logger.setLevel(logging.INFO)
+
+        sites = response.xpath('//*[@id="J_ItemList"]')
+        products = []
+        for site in sites:
+            logger.info("Appending site**************************************************" + str(site.extract()))
+            product = TmallshoesItem()
+            title = site.xpath('//a/@title').extract()
+            logger.info("Appending title**************************************************"+str(title))
+            product['title'] = [t for t in title]
+            products.append(product)
