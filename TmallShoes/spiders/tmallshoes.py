@@ -29,6 +29,6 @@ class TmallshoesSpider(scrapy.Spider):
         self.browser.quit()
 
     def parse(self, response):
-        products = response.xpath('//*[@id="J_ItemList"]//*[@class="product"]')
+        products = response.xpath('//*[@id="J_ItemList"]/div[@class="product"]')
         for product in products:
             print(str(product))
