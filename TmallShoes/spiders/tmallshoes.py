@@ -29,11 +29,13 @@ class TmallshoesSpider(scrapy.Spider):
         option.add_argument('headless')
         option.add_argument('--disable-gpu')
         option.add_argument(settings.USER_AGENT)
-        self.browser = webdriver.Chrome(executable_path=r'C:/ProgramData/Anaconda3/Library/bin/chromedriver.exe',chrome_options=option)
+        self.browser = webdriver.Chrome(executable_path=r'C:/ProgramData/Anaconda3/Library/bin/chromedriver.exe',
+                                        chrome_options=option)
         self.browser.set_window_size(1440, 900)
         self.wait = WebDriverWait(self.browser, 10)
         super(TmallshoesSpider, self).__init__()
-        dispatcher.connect(self.spider_closed, signals.spider_closed)  # 第二个参数是信号（spider_closed:爬虫关闭信号，信号量有很多）,第一个参数是当执行第二个参数信号时候要执行的方法
+        dispatcher.connect(self.spider_closed,
+                           signals.spider_closed)  # 第二个参数是信号（spider_closed:爬虫关闭信号，信号量有很多）,第一个参数是当执行第二个参数信号时候要执行的方法
 
     def spider_closed(self, spider):
         # 当爬虫退出的时候关闭chrome
