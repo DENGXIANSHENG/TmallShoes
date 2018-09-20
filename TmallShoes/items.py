@@ -17,4 +17,3 @@ class TmallshoesItem(scrapy.Item):
     deal = Field()
     title = Field()
     shop = Field()
-    location = Field()
