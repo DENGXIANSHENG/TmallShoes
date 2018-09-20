@@ -15,6 +15,7 @@ SPIDER_MODULES = ['TmallShoes.spiders']
 NEWSPIDER_MODULE = 'TmallShoes.spiders'
 
 KEY_WORDS = '女鞋'
+SERVICE_ARGS = ['--load-images=false', '--disk-cache=true']
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'TmallShoes (+http://www.yourdomain.com)'
