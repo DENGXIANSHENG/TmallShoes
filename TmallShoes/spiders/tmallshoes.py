@@ -18,13 +18,6 @@ class TmallshoesSpider(scrapy.Spider):
     start_urls = ['https://www.tmall.com']
 
     def __init__(self):
-        '''
-        option = webdriver.ChromeOptions()
-        option.add_experimental_option("excludeSwitches", ["ignore-certificate-errors"])
-        self.browser = webdriver.Chrome(executable_path=r"C:\ProgramData\Anaconda3\Library\bin\chromedriver.exe",
-                                        option=option)
-        '''
-
         option = webdriver.ChromeOptions()
         option.add_argument('headless')
         option.add_argument('--disable-gpu')
