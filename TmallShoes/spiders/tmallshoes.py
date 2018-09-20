@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 import scrapy
 from scrapy import signals
 from scrapy.xlib.pydispatch import dispatcher
@@ -33,7 +35,7 @@ class TmallshoesSpider(scrapy.Spider):
     def parse(self, response):
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
-
+        #total = response.xpath('//*[@id="content"]/div/div[9]/div/b[2]/form/text()').extract()
         sites = response.xpath('//*[@id="J_ItemList"]/div[@class="product  "]/div[@class="product-iWrap"]')
         products = []
         for site in sites:
@@ -47,7 +49,7 @@ class TmallshoesSpider(scrapy.Spider):
                 './div[@class="productImg-wrap"]/a/@href').extract()
             # product['link'] = [l for l in link]
             for l in link:
-                product['link'] = l
+                product['link'] = 'https:' + l
             price = site.xpath(
                 './p[@class="productPrice"]/em/text()').extract()
             # product['price'] = [p for p in price]
