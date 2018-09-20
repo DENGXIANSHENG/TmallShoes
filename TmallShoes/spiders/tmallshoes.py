@@ -34,27 +34,34 @@ class TmallshoesSpider(scrapy.Spider):
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
 
-        sites = response.xpath('//*[@id="J_ItemList"]')
+        sites = response.xpath('//*[@id="J_ItemList"]/div[@class="product  "]/div[@class="product-iWrap"]')
         products = []
         for site in sites:
             product = TmallshoesItem()
             title = site.xpath(
-                '//div[@class="product  "]/div[@class="product-iWrap"]/p[@class="productTitle"]/a/@title').extract()
-            product['title'] = [t for t in title]
+                './p[@class="productTitle"]/a/@title').extract()
+            # product['title'] = [t for t in title]
+            for t in title:
+                product['title'] = t
             link = site.xpath(
-                '//div[@class="product  "]/div[@class="product-iWrap"]/div[@class="productImg-wrap"]/a/@href').extract()
-            product['link'] = [l for l in link]
+                './div[@class="productImg-wrap"]/a/@href').extract()
+            # product['link'] = [l for l in link]
+            for l in link:
+                product['link'] = l
             price = site.xpath(
-                '//div[@class="product  "]/div[@class="product-iWrap"]/p[@class="productPrice"]/em/text()').extract()
-            product['price'] = [p for p in price]
-
+                './p[@class="productPrice"]/em/text()').extract()
+            # product['price'] = [p for p in price]
+            for p in price:
+                product['price'] = p
             deal = site.xpath(
-                '//div[@class="product  "]/div[@class="product-iWrap"]/p[@class="productStatus"]/span/em/text()').extract()
-            product['deal'] = [d for d in deal]
-
+                './p[@class="productStatus"]/span/em/text()').extract()
+            # product['deal'] = [d for d in deal]
+            for d in deal:
+                product['deal'] = d[:-1]
             shop = site.xpath(
-                '//div[@class="product  "]/div[@class="product-iWrap"]/div[@class="productShop"]/a/text()').extract()
-            product['shop'] = [p for p in shop]
-
+                './div[@class="productShop"]/a/text()').extract()
+            # product['shop'] = [p for p in shop]
+            for s in shop:
+                product['shop'] = s.replace('\n', '')
             products.append(product)
-            logger.info("Appending price**************************************************" + str(products))
+        return products
