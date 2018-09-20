@@ -37,9 +37,24 @@ class TmallshoesSpider(scrapy.Spider):
         sites = response.xpath('//*[@id="J_ItemList"]')
         products = []
         for site in sites:
-            logger.info("Appending site**************************************************" + str(site.extract()))
             product = TmallshoesItem()
-            title = site.xpath('//a/@title').extract()
-            logger.info("Appending title**************************************************"+str(title))
+            title = site.xpath(
+                '//div[@class="product  "]/div[@class="product-iWrap"]/p[@class="productTitle"]/a/@title').extract()
             product['title'] = [t for t in title]
+            link = site.xpath(
+                '//div[@class="product  "]/div[@class="product-iWrap"]/div[@class="productImg-wrap"]/a/@href').extract()
+            product['link'] = [l for l in link]
+            price = site.xpath(
+                '//div[@class="product  "]/div[@class="product-iWrap"]/p[@class="productPrice"]/em/text()').extract()
+            product['price'] = [p for p in price]
+
+            deal = site.xpath(
+                '//div[@class="product  "]/div[@class="product-iWrap"]/p[@class="productStatus"]/span/em/text()').extract()
+            product['deal'] = [d for d in deal]
+
+            shop = site.xpath(
+                '//div[@class="product  "]/div[@class="product-iWrap"]/div[@class="productShop"]/a/text()').extract()
+            product['shop'] = [p for p in shop]
+
             products.append(product)
+            logger.info("Appending price**************************************************" + str(products))
