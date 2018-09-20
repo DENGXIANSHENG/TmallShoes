@@ -36,8 +36,8 @@ class TmallshoesSpider(scrapy.Spider):
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
         total = response.xpath('//*[@id="content"]/div/div[9]/div/b[2]/form/text()').extract()
-        total = int(re.compile('(\d+)').search(total.text).group(1))
-        logger.info('Total page==================================='+total)
+        total = ''.join(total).replace('\n', '').replace(' ', '')
+        total = int(re.compile('(\d+)').search(total).group(1))
         sites = response.xpath('//*[@id="J_ItemList"]/div[@class="product  "]/div[@class="product-iWrap"]')
         products = []
         for site in sites:
